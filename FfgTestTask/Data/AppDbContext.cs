@@ -18,8 +18,8 @@ namespace FfgTestTask.Data
         public DbSet<DataRow> DataTable { get; set; }
 
         /// <summary>
-        /// Таблица с логами
+        /// Таблица с логами приложения
         /// </summary>
-        public DbSet<LogRow> Log { get; set; }
+        public DbSet<LogRow> AppLogs { get; set; }
     }
 }

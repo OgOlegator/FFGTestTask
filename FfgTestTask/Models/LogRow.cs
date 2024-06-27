@@ -1,5 +1,6 @@
 ﻿using FfgTestTask.Enums;
 using Microsoft.AspNetCore.Http.Connections;
+using System.ComponentModel.DataAnnotations;
 
 namespace FfgTestTask.Models
 {
@@ -8,12 +9,12 @@ namespace FfgTestTask.Models
     /// </summary>
     public class LogRow
     {
-        public DateTime DateTime { get; set; }
+        [Key]
+        public int Id { get; set; }
 
-        public LogMessageType Type { get; set; }
-
-        public string Message { get; set; }
-
-        public string Data { get; set; }
+        /// <summary>
+        /// Детали сообщения в формате JSON
+        /// </summary>
+        public string DetailsJson { get; set; }
     }
 }
