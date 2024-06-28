@@ -1,6 +1,9 @@
 using FfgTestTask.Data;
+using FfgTestTask.Services;
 using FfgTestTask.Services.DbLogger;
+using FfgTestTask.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +13,18 @@ builder.Services.AddDbContext<AppDbContext>(options
 
 builder.Logging.AddDataBaseLogger(builder.Configuration.GetConnectionString("DefaultConnection"));
 
+builder.Services.AddScoped<IDataTableService, DataTableService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+}).AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
 

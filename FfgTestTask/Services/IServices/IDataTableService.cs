@@ -1,5 +1,5 @@
-﻿using FfgTestTask.Models.Dtos;
-using System.Data;
+﻿using FfgTestTask.Models;
+using FfgTestTask.Models.Dtos;
 
 namespace FfgTestTask.Services.IServices
 {
