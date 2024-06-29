@@ -1,7 +1,6 @@
 ﻿using FfgTestTask.Data;
 using FfgTestTask.Exceptions;
 using FfgTestTask.Models;
-using FfgTestTask.Models.Dtos;
 using FfgTestTask.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +24,7 @@ namespace FfgTestTask.Services
                 .ToListAsync();
         }
 
-        public async Task SaveAsync(List<DataRowDto> data)
+        public async Task SaveAsync(List<DataRow> data)
         {
             var saveData = data
                 .Select(dataRow => new DataRow

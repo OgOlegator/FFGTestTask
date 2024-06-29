@@ -1,6 +1,4 @@
-﻿using FfgTestTask.Enums;
-using Microsoft.AspNetCore.Http.Connections;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FfgTestTask.Models
 {

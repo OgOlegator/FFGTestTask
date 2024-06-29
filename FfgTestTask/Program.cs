@@ -1,6 +1,5 @@
 using FfgTestTask.Data;
 using FfgTestTask.Services;
-using FfgTestTask.Services.DbLogger;
 using FfgTestTask.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -11,8 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Logging.AddDataBaseLogger(builder.Configuration.GetConnectionString("DefaultConnection"));
-
+builder.Services.AddScoped<IAppLogger, AppDbLogger>();
 builder.Services.AddScoped<IDataTableService, DataTableService>();
 
 builder.Services.AddControllers();

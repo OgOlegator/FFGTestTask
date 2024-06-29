@@ -1,5 +1,4 @@
 ﻿using FfgTestTask.Models;
-using FfgTestTask.Models.Dtos;
 
 namespace FfgTestTask.Services.IServices
 {
@@ -13,7 +12,7 @@ namespace FfgTestTask.Services.IServices
         /// </summary>
         /// <param name="data">Данные</param>
         /// <returns></returns>
-        Task SaveAsync(List<DataRowDto> data);
+        Task SaveAsync(List<DataRow> data);
 
         /// <summary>
         /// Получить данные
