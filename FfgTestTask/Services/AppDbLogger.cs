@@ -23,13 +23,19 @@ namespace FfgTestTask.Services
         {
             var dateTime = DateTime.Now;
 
+            var exceptionDetails = exception == null ? null : new
+            {
+                exception.GetType().Name,
+                exception.Message,
+            };
+
             var logMsgDetailsJson = JsonSerializer.Serialize(new
             {
                 logLevel,
                 message,
                 dateTime,
                 parameters,
-                exception,
+                exceptionDetails
             });
 
             await Task.Run(() =>

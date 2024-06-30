@@ -20,6 +20,6 @@ namespace FfgTestTask.Services.IServices
         /// <param name="codeFilter">Фильтр по полю Code</param>
         /// <param name="searchValue">Искомое значение</param>
         /// <returns>Данные</returns>
-        Task<List<DataRow>> GetAsync(List<int>? codeFilter, string? searchValue);
+        Task<List<DataRow>> GetAsync(List<int> codeFilter, string? searchValue);
     }
 }

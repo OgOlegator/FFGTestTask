@@ -9,13 +9,11 @@ namespace FfgTestTask.Controllers
     [ApiController]
     public class TestTaskController : ControllerBase
     {
-        private readonly ILogger<TestTaskController> _logger;
         private readonly IAppLogger _appLogger;
         private readonly IDataTableService _dataTableService;
 
-        public TestTaskController(ILogger<TestTaskController> logger, IDataTableService dataTableService, IAppLogger appLogger)
+        public TestTaskController(IDataTableService dataTableService, IAppLogger appLogger)
         {
-            _logger = logger;
             _dataTableService = dataTableService;
             _appLogger = appLogger;
         }
@@ -28,7 +26,8 @@ namespace FfgTestTask.Controllers
         [HttpPost]
         public async Task<IResult> SaveAsync([FromBody] List<Dictionary<string,string>> data)  //Dictionary используется для корректного преобразования входящего JSON
         {
-            var responseId = GetResonseId(); //Для удобства отслеживания выполнения запроса в логе
+            //Для удобства отслеживания выполнения запроса в логе
+            var responseId = GetResonseId(); 
             var methodName = "SaveAsync";
 
             await _appLogger.LogAsync(
@@ -50,19 +49,12 @@ namespace FfgTestTask.Controllers
 
                 await _dataTableService.SaveAsync(newData);
 
-                await _appLogger.LogAsync(
-                    LogLevel.Information,
-                    $"Success executing {methodName}",
-                    new Dictionary<string, object>
-                    {
-                        { "ResponseId", responseId},
-                    });
-
                 return Results.Ok();
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
-                var errMessage = "В одной из строк в поле Code передано значение, которое не является числом";
+                var errMessage = "One of the lines in the Code field contains a value that is not a number";
+
                 await _appLogger.LogAsync(
                     LogLevel.Error,
                     $"Error executing {methodName}",
@@ -70,7 +62,8 @@ namespace FfgTestTask.Controllers
                     {
                         { "ResponseId", responseId},
                         { "ErrorMessage", errMessage}
-                    });
+                    }, 
+                    ex);
 
                 return Results.BadRequest(errMessage);
             }
@@ -82,10 +75,20 @@ namespace FfgTestTask.Controllers
                     new Dictionary<string, object>
                     {
                         { "ResponseId", responseId},
-                        { "ErrorMessage", ex.Message}
-                    });
+                    },
+                    ex);
 
                 return Results.BadRequest(ex.Message);
+            }
+            finally
+            {
+                await _appLogger.LogAsync(
+                    LogLevel.Information,
+                    $"End executing {methodName}",
+                    new Dictionary<string, object>
+                    {
+                        { "ResponseId", responseId},
+                    });
             }
         }
 
@@ -98,7 +101,8 @@ namespace FfgTestTask.Controllers
         [HttpGet]
         public async Task<IResult> GetAsync(string? codeFilter = null, string? valueFilter = null) 
         {
-            var responseId = GetResonseId(); //Для удобства отслеживания выполнения запроса в логе
+            //Для удобства отслеживания выполнения запроса в логе
+            var responseId = GetResonseId(); 
             var methodName = "GetAsync";
 
             await _appLogger.LogAsync(
@@ -111,25 +115,48 @@ namespace FfgTestTask.Controllers
                     { "ValueFilter", valueFilter },
                 });
 
-            var codeFilters = string.IsNullOrEmpty(codeFilter)
-                ? new List<int>()
-                : codeFilter
-                    .Split(';')
-                    .Select(code => int.Parse(code))
-                    .ToList();
+            List<DataRow> result = null;
 
-            var result = await _dataTableService.GetAsync(codeFilters, valueFilter);
+            try
+            {
+                var codeFilters = string.IsNullOrEmpty(codeFilter)
+                    ? new List<int>()
+                    : codeFilter
+                        .Split(';')
+                        .Select(code => int.Parse(code))
+                        .ToList();
 
-            await _appLogger.LogAsync(
-                LogLevel.Information,
-                $"Success executing {methodName}",
-                new Dictionary<string, object>
-                {
-                    { "ResponseId", responseId},
-                    { "Result", result },
-                });
+                result = await _dataTableService.GetAsync(codeFilters, valueFilter);
 
-            return Results.Ok(result);
+                return Results.Ok(result);
+            }
+            catch (FormatException ex)
+            {
+                var errMessage = "In one of the Code filters, a value that is not a number was passed";
+
+                await _appLogger.LogAsync(
+                    LogLevel.Error,
+                    $"Error executing {methodName}",
+                    new Dictionary<string, object>
+                    {
+                        { "ResponseId", responseId},
+                        { "ErrorMessage", errMessage}
+                    },
+                    ex);
+
+                return Results.BadRequest(errMessage);
+            }
+            finally
+            {
+                await _appLogger.LogAsync(
+                    LogLevel.Information,
+                    $"End executing {methodName}",
+                    new Dictionary<string, object>
+                    {
+                        { "ResponseId", responseId},
+                        { "Result", result },
+                    });
+            }
         }
 
         private string GetResonseId()

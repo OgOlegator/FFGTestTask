@@ -15,7 +15,7 @@ namespace FfgTestTask.Services
             _context = context;
         }
 
-        public async Task<List<DataRow>> GetAsync(List<int>? codeFilter, string? searchValue)
+        public async Task<List<DataRow>> GetAsync(List<int> codeFilter, string? searchValue)
         {
             return await _context.DataTable
                 .Where(dataRow
