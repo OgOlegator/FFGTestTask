@@ -15,6 +15,12 @@ namespace FfgTestTask.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Получение данных из БД
+        /// </summary>
+        /// <param name="codeFilter">Фильтр по полю Code</param>
+        /// <param name="searchValue">Фильтр по полюс Value</param>
+        /// <returns>Данные из БД</returns>
         public async Task<List<DataRow>> GetAsync(List<int> codeFilter, string? searchValue)
         {
             return await _context.DataTable
@@ -24,6 +30,12 @@ namespace FfgTestTask.Services
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Сохранение в БД
+        /// </summary>
+        /// <param name="data">Данные</param>
+        /// <returns></returns>
+        /// <exception cref="FfgTestTaskException">Ошибка при обновлении данных</exception>
         public async Task SaveAsync(List<DataRow> data)
         {
             var saveData = data
