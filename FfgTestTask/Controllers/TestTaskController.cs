@@ -159,6 +159,10 @@ namespace FfgTestTask.Controllers
             }
         }
 
+        /// <summary>
+        /// Сгенерировать ИД запроса
+        /// </summary>
+        /// <returns>ИД запроса</returns>
         private string GetResonseId()
             => Guid.NewGuid().ToString();
     }
