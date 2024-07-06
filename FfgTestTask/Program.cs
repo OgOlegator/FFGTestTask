@@ -1,4 +1,5 @@
 using FfgTestTask.Data;
+using FfgTestTask.Middlewares;
 using FfgTestTask.Services;
 using FfgTestTask.Services.IServices;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IAppLogger, AppDbLogger>();
+builder.Services.AddTransient<IAppLogger, AppDbLogger>();
 builder.Services.AddScoped<IDataTableService, DataTableService>();
 
 builder.Services.AddControllers();
@@ -36,6 +37,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.MapControllers();
 

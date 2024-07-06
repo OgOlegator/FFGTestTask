@@ -19,23 +19,12 @@ namespace FfgTestTask.Services
             _context = context;
         }
 
-        public async Task LogAsync(LogLevel logLevel, string message, Dictionary<string, object> parameters = null, Exception exception = null)
+        public async Task LogAsync(string message, Dictionary<string, object> parameters = null)
         {
-            var dateTime = DateTime.Now;
-
-            var exceptionDetails = exception == null ? null : new
-            {
-                exception.GetType().Name,
-                exception.Message,
-            };
-
             var logMsgDetailsJson = JsonSerializer.Serialize(new
             {
-                logLevel,
                 message,
-                dateTime,
-                parameters,
-                exceptionDetails
+                parameters
             });
 
             await Task.Run(() =>
