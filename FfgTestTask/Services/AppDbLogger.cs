@@ -12,7 +12,6 @@ namespace FfgTestTask.Services
     public class AppDbLogger : IAppLogger
     {
         private readonly AppDbContext _context;
-        private object _lock = new object();
 
         public AppDbLogger(AppDbContext context)
         {
@@ -27,18 +26,12 @@ namespace FfgTestTask.Services
                 parameters
             });
 
-            await Task.Run(() =>
+            await _context.AppLogs.AddAsync(new LogRow
             {
-                lock (_lock)
-                {
-                    _context.AppLogs.Add(new LogRow
-                    {
-                        DetailsJson = logMsgDetailsJson,
-                    });
-
-                    _context.SaveChanges();
-                }
+                DetailsJson = logMsgDetailsJson,
             });
+
+            await _context.SaveChangesAsync();
         }
     }
 }
