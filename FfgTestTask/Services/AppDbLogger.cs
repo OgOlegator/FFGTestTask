@@ -31,8 +31,6 @@ namespace FfgTestTask.Services
                 DetailsJson = logMsgDetailsJson,
             });
 
-            Thread.Sleep(10000);
-
             await _context.SaveChangesAsync();
         }
     }
