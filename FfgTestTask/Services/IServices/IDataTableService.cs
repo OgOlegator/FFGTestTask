@@ -12,7 +12,7 @@ namespace FfgTestTask.Services.IServices
         /// </summary>
         /// <param name="data">Данные</param>
         /// <returns></returns>
-        Task SaveAsync(List<DataRow> data);
+        void Save(List<DataRow> data);
 
         /// <summary>
         /// Получить данные
@@ -20,6 +20,6 @@ namespace FfgTestTask.Services.IServices
         /// <param name="codeFilter">Фильтр по полю Code</param>
         /// <param name="searchValue">Искомое значение</param>
         /// <returns>Данные</returns>
-        Task<List<DataRow>> GetAsync(List<int> codeFilter, string? searchValue);
+        List<DataRow> Get(List<int> codeFilter, string? searchValue);
     }
 }

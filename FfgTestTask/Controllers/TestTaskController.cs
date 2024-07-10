@@ -22,7 +22,7 @@ namespace FfgTestTask.Controllers
         /// <param name="data">Абстрактные данные в JSON</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IResult> SaveAsync([FromBody] List<Dictionary<string,string>> data)  //Dictionary используется для корректного преобразования входящего JSON
+        public IResult Save([FromBody] List<Dictionary<string,string>> data)  //Dictionary используется для корректного преобразования входящего JSON
         {
             try
             {
@@ -32,7 +32,7 @@ namespace FfgTestTask.Controllers
                     Value = dataRow.First().Value
                 }).ToList();
 
-                await _dataTableService.SaveAsync(newData);
+                _dataTableService.Save(newData);
 
                 return Results.Ok();
             }
@@ -53,7 +53,7 @@ namespace FfgTestTask.Controllers
         /// <param name="valueFilter">Ограничения по значению, через поиск подстроки</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IResult> GetAsync(string? codeFilter = null, string? valueFilter = null) 
+        public IResult Get(string? codeFilter = null, string? valueFilter = null) 
         {
             try
             {
@@ -64,7 +64,7 @@ namespace FfgTestTask.Controllers
                         .Select(code => int.Parse(code))
                         .ToList();
 
-                var result = await _dataTableService.GetAsync(codeFilters, valueFilter);
+                var result = _dataTableService.Get(codeFilters, valueFilter);
 
                 return Results.Ok(result);
             }
